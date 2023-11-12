@@ -1,0 +1,8 @@
+[client]
+port = 9906
+
+[mysqld]
+port= 9906
+general_log = 1
+general_log_file = /var/lib/mysql/general.log
+bind-address = 0.0.0.0

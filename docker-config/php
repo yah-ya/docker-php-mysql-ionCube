@@ -1,0 +1,48 @@
+# Use the official PHP 8.1 image
+FROM php:8.1.1-apache
+ENV APACHE_DOCUMENT_ROOT /var/www/html/web
+WORKDIR /sup/
+COPY . .
+
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    g++ \
+    coreutils \
+    make \
+    autoconf \
+    bash \
+    make \
+    git \
+    wget \
+    ca-certificates \
+    openssl \
+    openssh-client \
+    libbz2-dev \
+    zlib1g-dev \
+    libpng-dev \
+    tzdata \
+    libfcgi-dev \
+    libsasl2-dev \
+    nodejs
+
+RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires
+
+# Install ionCube Loader for PHP 8.1
+RUN cd /tmp \
+    && curl -o ioncube.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
+    && tar -xvvzf ioncube.tar.gz \
+    && mv ioncube/ioncube_loader_lin_8.1.so /usr/local/lib/php/extensions/no-debug-non-zts-20210902/ \
+    && rm -Rf ioncube.tar.gz ioncube \
+    && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/ioncube_loader_lin_8.1.so" > /usr/local/etc/php/conf.d/00_docker-php-ext-ioncube_loader_lin_8.1.ini
+
+# Install other PHP extensions
+RUN docker-php-ext-install mysqli \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install bz2
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+# Clean up
+RUN rm -rf /tmp/* /var/cache/apk/*
+
+# Set your PHP configuration if needed
+# COPY php.ini /usr/local/etc/php/conf.d/custom.ini
