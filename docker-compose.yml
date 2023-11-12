@@ -3,7 +3,7 @@ services:
   # PHP Service
   php:
     build:
-     dockerfile: ./docker-config/php
+      dockerfile: ./docker-config/php
     container_name: laravel-app
     # this is the path to your laravel project
     volumes:
@@ -17,7 +17,7 @@ services:
 
   # MySQL Service
   mysql:
-    image: mysql:5.7
+    image: mysql:latest  # Updated to the latest MySQL version
     container_name: mysql-db
     volumes:
       - laravel-mysql-data:/var/lib/mysql
