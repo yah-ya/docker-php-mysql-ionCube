@@ -11,7 +11,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+      - APACHE_DOCUMENT_ROOT=/var/www/html
     networks:
       - laravel-net
 
