@@ -3,35 +3,43 @@ services:
   # PHP Service
   php:
     build:
-      dockerfile: ./docker-config/php
+      context: ./docker-config
+      dockerfile: php
     container_name: laravel-app
     # this is the path to your laravel project
     volumes:
-      - ./project:/var/www/html
+      - ./html:/var/www/html
     ports:
       - "8080:80"
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html
     networks:
-      - laravel-net
+      - network
 
   # MySQL Service
   mysql:
     image: mysql:latest  # Updated to the latest MySQL version
+    command: --default-authentication-plugin=mysql_native_password
     container_name: mysql-db
-    volumes:
-      - laravel-mysql-data:/var/lib/mysql
-      - ./docker-config/mysql.cnf:/etc/mysql/my.cnf
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3316:3306"  # Map the container port 9906 to the host port 9906
     environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      - MYSQL_DATABASE=laravel_db
-      - MYSQL_USER=laravel_user
-      - MYSQL_PASSWORD=laravel_password
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./storage/mysql:/var/lib/mysql/
+      - ./docker-config/mysql.cnf:/etc/mysql/my.cnf
     networks:
-      - laravel-net
+      - network
 
 volumes:
-  laravel-mysql-data:
+  mysql-data:
 
 networks:
-  laravel-net:
+  network:
