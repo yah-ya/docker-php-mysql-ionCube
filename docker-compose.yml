@@ -5,7 +5,7 @@ services:
     build:
       context: ./docker-config
       dockerfile: php
-    container_name: laravel-app
+    container_name: app
     # this is the path to your laravel project
     volumes:
       - ./html:/var/www/html

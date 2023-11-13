@@ -1,8 +1,8 @@
-# Docker Configuration for PHP, MySQL, and ionCube
+# Docker Configuration for PHP and MySQL with ionCube
 
-This project provides a simple Docker configuration to set up the latest versions of PHP and MySQL, including the ionCube plugin for PHP. This configuration is designed to streamline the development and deployment of projects, particularly those involving ionCube, which is widely used in WordPress projects. These files are versatile and can be employed for working with WordPress projects as well.
+This project provides a Docker configuration to set up PHP, MySQL, and ionCube for streamlined development and deployment of Laravel projects, especially those involving ionCube functionality.
 
-### Table of Contents
+## Table of Contents
 1. [Introduction](#introduction)
 2. [Prerequisites](#prerequisites)
 3. [Getting Started](#getting-started)
@@ -13,63 +13,69 @@ This project provides a simple Docker configuration to set up the latest version
 8. [Volumes](#volumes)
 9. [Environment Variables](#environment-variables)
 
-### Introduction
-This Docker configuration provides a quick and easy setup for running PHP, MySQL, and ionCube. It's particularly useful for projects, such as WordPress, that rely on ionCube functionality.
+## Introduction
+This Docker configuration provides a quick and easy setup for running PHP, MySQL, and ionCube. It's particularly useful for Laravel projects that may require ionCube functionality.
+No need to install MAMP or WAMP or manual php/mysql on your machine. Just install Docker and Docker Compose and you're good to go.
 
-### Prerequisites
-- Docker and Docker Compose installed on your machine.
+## Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
 
-### Getting Started
+## Getting Started
 1. Clone this repository.
 2. Navigate to the root directory of the cloned repository.
 
-### Project Structure
+## Project Structure
 - `docker-config/`: Contains Docker configuration files.
-    - `php/`: Dockerfile for PHP with ionCube.
-- `project/`: Place your PHP project files here.
+  - `php/`: Dockerfile for PHP with ionCube.
+- `html/`: Place your project files here.
 
-### Configuration Details
-#### PHP Service
+## Configuration Details
+### PHP Service
 - **Image:** PHP with ionCube.
-- **Container Name:** laravel-app.
+- **Container Name:** app.
 - **Volumes:**
-    - `./project:/var/www/html`: Mounts your project files into the container.
+  - `./html:/var/www/html`: Mounts your project files into the container.
 - **Ports:**
-    - Host: 8080, Container: 80.
+  - Host: 8080, Container: 80.
 - **Environment Variables:**
-    - `APACHE_DOCUMENT_ROOT=/var/www/html/public`.
+  - `APACHE_DOCUMENT_ROOT=/var/www/html`
 
-#### MySQL Service
+### MySQL Service
 - **Image:** MySQL latest version.
 - **Container Name:** mysql-db.
-- **Volumes:**
-    - `laravel-mysql-data:/var/lib/mysql`: Persists MySQL data.
-    - `./docker-config/mysql.cnf:/etc/mysql/my.cnf`: Custom MySQL configuration file.
+- **Ports:**
+  - Host: 3316, Container: 3306 (default MySQL port).
 - **Environment Variables:**
-    - `MYSQL_ROOT_PASSWORD=root_password`
-    - `MYSQL_DATABASE=laravel_db`
-    - `MYSQL_USER=laravel_user`
-    - `MYSQL_PASSWORD=laravel_password`
+  - `MYSQL_ROOT_PASSWORD=root_password`
+  - `MYSQL_DATABASE=db`
+  - `MYSQL_USER=admin`
+  - `MYSQL_PASSWORD=secret`
 
-### Usage
-1. Run `docker-compose up -d` to start the services.
-2. Access your PHP project at `http://localhost:8080`.
+## Usage
+1. Ensure that you have [Docker](https://docs.docker.com/get-docker/) installed on your machine.
+2. Build the Docker Compose configuration by running the following command in the project root directory:
+   ```bash
+   docker-compose build
+(Note: This step may take some time, as it builds the Docker images based on the configuration.)
+3. Start the services by running:
+   ```bash
+   docker-compose up -d
+4. You can now access your Laravel project at http://localhost:8080.
+5. To stop the services, run:
+   ```bash
+   docker-compose down
+## Network and Ports
+- Network: network.
+- PHP Service Port: 8080 (Host) mapped to 80 (Container).
+- MySQL Service Port: 3316 (Host) mapped to 3306 (Container).
 
-### Network and Ports
-- **Network:** laravel-net.
-- **PHP Service Port:** 8080 (Host) mapped to 80 (Container).
-
-### Volumes
-- `laravel-mysql-data`: Volume for persisting MySQL data.
-
-### Environment Variables
-- PHP Service:
-    - `APACHE_DOCUMENT_ROOT`: Specifies the document root for Apache.
-
-- MySQL Service:
-    - `MYSQL_ROOT_PASSWORD`: Root password for MySQL.
-    - `MYSQL_DATABASE`: MySQL database name.
-    - `MYSQL_USER`: MySQL user.
-    - `MYSQL_PASSWORD`: Password for the MySQL user.
-
----
+## Volumes
+- mysql-data: Volume for persisting MySQL data.
+## Environment Variables
+### PHP Service
+- APACHE_DOCUMENT_ROOT: Sets the document root for Apache.
+### MySQL Service
+- MYSQL_ROOT_PASSWORD: Sets the root password for MySQL.
+- MYSQL_DATABASE: Sets the database name for MySQL.
+- MYSQL_USER: Sets the username for MySQL.
+- MYSQL_PASSWORD: Sets the password for the MySQL user.
