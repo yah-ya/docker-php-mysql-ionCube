@@ -1,6 +1,8 @@
 # Docker Configuration for PHP and MySQL with ionCube
 
-This project provides a Docker configuration to set up PHP, MySQL, and ionCube for streamlined development and deployment of Laravel projects, especially those involving ionCube functionality.
+TThis Docker configuration provides a quick and easy setup for running Latest PHP, MySQL, and ionCube. It's particularly useful for WordPress Projects that may require ionCube functionality.
+No need to install MAMP or WAMP or manual php/mysql on your machine. Just install Docker and Docker Compose and you're good to go.
+
 
 ## Table of Contents
 1. [Introduction](#introduction)
